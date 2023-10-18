@@ -327,7 +327,7 @@ app.get(('/reviews'),(req,res)=>{
 
 })
 
-//2.seleccionar el users cuyo id se pase por parametro 
+//2.seleccionar el reviews cuyo id se pase por parametro 
 app.get('/reviews/:id', (req,res)=>{
 
     reviewsId=req.params.id
@@ -336,7 +336,7 @@ app.get('/reviews/:id', (req,res)=>{
 return res.json(
     {
     success:true,
-     msg:`seleccionando  users cuyo id es : ${reviewsId}`
+     msg:`seleccionando  reviews cuyo id es : ${reviewsId}`
 
     }
 )
