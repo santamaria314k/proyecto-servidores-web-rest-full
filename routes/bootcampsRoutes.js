@@ -76,16 +76,24 @@ router.post(('/'),  async (req,res)=>{
 
 
 //4. actulizar  bootcamp por id
-router.put('/:id', (req,res)=>{
+router.put('/:id',  async(req,res)=>{
 
     bootcampId=req.params.id
+    
+    updBootcamp=await Bootcamp.findByIdAndUpdate(
+    bootcampId,
+    req.body,
 
+    {
+        new:true,
+    }
+
+   )
 
 return res.json(
     {
     success:true,
-     msg:`actulizando bootcamp cuyo id es   : ${bootcampId}`
-
+    data :updBootcamp
     }
 )
 
@@ -97,16 +105,16 @@ return res.json(
 
 
 //4. eliminar   bootcamp por id
-router.delete('/:id', (req,res)=>{
+router.delete('/:id',async (req,res)=>{
 
     bootcampId=req.params.id
-
+    
+   await Bootcamp.findByIdAndDelete(bootcampId)
 
 return res.json(
     {
     success:true,
-     msg:`eliminando bootcamp cuyo id es   : ${bootcampId}`
-
+data:[]
     }
 )
 

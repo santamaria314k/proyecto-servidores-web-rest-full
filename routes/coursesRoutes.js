@@ -2,6 +2,7 @@
 const express = require('express');
 
 
+const Courses= require("../models/coursesModel.js")
 
 //definir rutas con la aplicasion principal
 const router =express.Router()
@@ -11,7 +12,7 @@ const router =express.Router()
 
 
 
-
+    
 
 
 
@@ -19,27 +20,31 @@ const router =express.Router()
 
 
 //1.seleccionar todos los courses
-router.get(('/'),(req,res)=>{
+router.get(('/'),  async(req,res)=>{
+//traer todos lo cursos de la base de datos 
+const courses =await Courses.find()
+
     return res.json(
         {
             success:true,
-             msg:"seleccionando todos los courses"
+           data:courses
         }
     )
 
 })
 
 //2.seleccionar el courses cuyo id se pase por parametro 
-router.get('/:id', (req,res)=>{
+router.get('/:id', async (req,res)=>{
 
-    coursesId=req.params.id
+ const   coursesId=req.params.id
+   //consultar lso bootcamps por id 
+   const  courses= await Courses.findById(coursesId)
 
 
 return res.json(
     {
     success:true,
-     msg:`seleccionando  courses cuyo id es : ${coursesId}`
-
+     data:courses
     }
 )
 
@@ -51,11 +56,14 @@ return res.json(
 
 
 //3.crear  los courses
-router.post(('/'),(req,res)=>{
+router.post(('/'),  async(req,res)=>{
+    const newcourses= await Courses.create(req.body)
+
+
     return res.json(
         {
             success:true,
-             msg:"crear courses"
+         data:newcourses
         }
     )
 
@@ -64,16 +72,27 @@ router.post(('/'),(req,res)=>{
 
 
 //4. actulizar  courses por id
-router.put('/:id', (req,res)=>{
+router.put('/:id', async(req,res)=>{
 
-    coursesId=req.params.id
+    const coursesId=req.params.id
+
+
+
+    updCourses=await Courses.findByIdAndUpdate(
+        coursesId,
+        req.body,
+    
+        {
+            new:true,
+        }
+    
+       )
 
 
 return res.json(
     {
     success:true,
-     msg:`actulizando courses cuyo id es   : ${coursesId}`
-
+    data:updCourses
     }
 )
 
@@ -84,15 +103,17 @@ return res.json(
 
 
 //4. eliminar   courses por id
-router.delete('/:id', (req,res)=>{
+router.delete('/:id', async(req,res)=>{
 
-    coursesId=req.params.id
+    const  coursesId=req.params.id
+
+    await Courses.findByIdAndDelete(coursesId)
 
 
 return res.json(
     {
     success:true,
-     msg:`eliminando courses cuyo id es   : ${coursesId}`
+    data:[]
 
     }
 )
