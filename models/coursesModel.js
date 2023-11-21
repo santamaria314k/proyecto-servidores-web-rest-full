@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const CoursesSchema = mongoose.Schema({ 
     title: {
-        type: String,
+        type: [String],
         required: [true, "el título es requerido"],
         unique: true,
         maxlength: [50, "nombre de bootcamp no mayor de 50 caracteres"]
     },
     description: {
-        type: String,
+        type: [String],
         maxlength: [100, "descripción de bootcamp no mayor de 100 caracteres"]
     },
     weeks: {
@@ -21,7 +21,7 @@ const CoursesSchema = mongoose.Schema({
         required: [true, "tuition es requerido"],
     },
     minimumSkil: {
-        type: String,
+        type: [String],
         required: [true, "minimumSkil es requerido"],
         enum: ["beginner", "intermediate", "advance"]
     },

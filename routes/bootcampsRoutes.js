@@ -1,6 +1,7 @@
 const express = require('express');
 
-const Bootcamp= require("../models/bootcampsModel.js")
+const Bootcamp= require("../models/bootcampsModel.js");
+const { default: mongoose } = require('mongoose');
 
 //definir rutas con la aplicasion principal
 const router =express.Router()
@@ -14,13 +15,26 @@ const router =express.Router()
 //1.seleccionar todos los bootcamps
 router.get(('/'), async (req,res)=>{
     //traer  los bootcamps en base de datos
-    const bootcamps= await Bootcamp.find()
-    return res.json(
-        {
+    const bootcamps=   await Bootcamp.find()
+    //--------scenario _: no hay bootcamps en mongo
+    if (bootcamps.length > 0) {
+        //si hay bbotcamps
+        res.status(200).json({
+            
             success:true,
-             data:bootcamps
-        }
-    )
+            data:bootcamps
+        })
+    }else{
+  // no hay bootcamps
+  res.status(404).json({
+            
+    success:false,
+    msg:"no hay bootcamps"
+})
+    
+    
+
+}
 
 })
 
@@ -36,19 +50,45 @@ router.get(('/'), async (req,res)=>{
 router.get('/:id',async (req,res)=>{
 
    const bootcampId=req.params.id
-    //consultar bootcamp po id
-  const  bootcamp= await Bootcamp.findById(bootcampId)
+try {
+    //scenario de que el bootcamp sea inbalido(1,a)
+    if(!mongoose.Types.ObjectId.isValid(bootcampId)){
+return res.status(500).json({
+    success:false,
+    msg:"id invalido"
+})
 
+    }else{
+        const  bootcamp= await Bootcamp.findById(bootcampId)
 
-return res.json(
-    {
-    success:true,
-     data:bootcamp
+        if (!bootcamp) {
+            res.status(404).json({
+                success:false,
+                msg:"bootcamp no encontrado"
+            })
+        } else {
+              return res.status(200).json(
+            {
+            success:true,
+             data:bootcamp
+        
+            }
+        )
 
+        }
+      
     }
-)
 
 
+} catch (error) {
+     res.status(500).json({
+        success:false,
+        msg:`Error encontrado: ${error.message}`
+     })
+}
+
+    //consultar bootcamp po id
+ 
 })
 
 
@@ -60,45 +100,93 @@ return res.json(
 //3.crear  los bootcamps
 router.post(('/'),  async (req,res)=>{
 
-    //guardar el bootcamp que viene del body
+    try {
+
+         //guardar el bootcamp que viene del body
    const newBootcamp= await Bootcamp.create(req.body)
-    return res.json(
-        {
-            success:true,
-             data:newBootcamp
-        }
-    )
-
-})
-
-
-
-
-
-//4. actulizar  bootcamp por id
-router.put('/:id',  async(req,res)=>{
-
-   const bootcampId=req.params.id
-    
-  const  updBootcamp=await Bootcamp.findByIdAndUpdate(
-    bootcampId,
-    req.body,
-
-    {
-        new:true,
-    }
-
+   return res.status(201).json(
+       {
+           success:true,
+            data:newBootcamp
+       }
    )
-
-return res.json(
-    {
-    success:true,
-    data :updBootcamp
-    }
-)
-
+        
+    } catch (error) {
+        
+res.status(500).json({
+success:false,
+msg:`Èrror encontrado: ${error.message}`
 
 })
+
+
+    }
+
+})
+
+
+
+
+
+// //4. actulizar  bootcamp por id
+// router.put('/:id',  async(req,res)=>{
+
+//    const bootcampId=req.params.id
+
+// try {
+
+
+//     if (!mongoose.Types.ObjectId.isValid(bootcampId)) {
+//         res.status(500).json({
+//             success:false,
+//             msg:"id del bootcamp no valido no encontrado"
+//         })  
+    
+//     } else {
+        
+// const  bootcamp=await Bootcamp.findByIdAndUpdate(
+//     bootcampId,
+//     req.body,
+
+//     {
+//         new:true,
+//         runValidators:true
+//     }
+// if (|bootcamp) {
+//     res.status(404).json({
+//         success:false,
+//         msg:"id del bootcamp no valido no encontrado"
+// } else {
+    
+
+
+
+
+// }
+
+    
+
+
+
+
+// } catch (error) {
+    
+// }
+
+    
+  
+
+//    )
+
+// return res.json(
+//     {
+//     success:true,
+//     data :updBootcamp
+//     }
+// )
+
+
+// })
 
 
 

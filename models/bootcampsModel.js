@@ -9,11 +9,11 @@ const BootcampSchema=mongoose.Schema({
         type:String,
         required:[true,"el nombre es requerido"],
         unique:true,
-        maxlength:[50 ,"nombre de boootcamp no mayor de 50 caracteres "]
+        maxlength:[20 ,"nombre de boootcamp no mayor de 50 caracteres "]
     } ,
     phone:{
         type:Number,
-        maxlength:[10 ,"telefono  de boootcamp no mayor de 10 digitos "]
+        max:[9999999999 ,"telefono  de boootcamp no mayor de 10 digitos "]
 
     },
     address:{
