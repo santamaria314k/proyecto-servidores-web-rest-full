@@ -1,39 +1,26 @@
 
-
-
-
-
 const mongoose =require('mongoose')
 
 
 const ReviewsSchema=mongoose.Schema({ 
-    name:{
+    title:{
         type:String,
-        required:[true,"el nombre es requerido"],
-        unique:true,
-        maxlength:[50 ,"nombre de boootcamp no mayor de 50 caracteres "]
+        required:[true,"el titulo es requerido"],
+        maxlength:[50 ,"titulo de reviews no mayor de 50 caracteres "]
     } ,
-    phone:{
-        type:Number,
-        maxlength:[10 ,"telefono  de boootcamp no mayor de 10 digitos "]
-
-    },
-    address:{
+    Comment:{
         type:String,
-        required:[true,"la direccion es requerida"],
-        maxlength:[100 ,"direccion  de boootcamp no mayor de 100 caracteres "]
+        maxlength:[1000 ,"comentario no mayor de 1000 caract "]
 
     },
-    topics:{
-        type:[String],
-        required:[true,"temas son  requeridos"],
-        enum:["Frontend ","Backend","AI"]
+    rating:{
+        type:Number,
+        required:[true,"el rating  es requerid0"],
+        maxlength:[10 ,"rating  no mayor de 10 caracteres "]
 
-    },
-    AverageRating:Number,
-    CreatedAt:Date
+    }
 
 
- })
+ });
  module.exports=mongoose.model('Reviews',ReviewsSchema)
 

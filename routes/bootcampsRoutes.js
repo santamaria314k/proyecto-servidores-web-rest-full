@@ -35,7 +35,7 @@ router.get(('/'), async (req,res)=>{
 
 router.get('/:id',async (req,res)=>{
 
-    bootcampId=req.params.id
+   const bootcampId=req.params.id
     //consultar bootcamp po id
   const  bootcamp= await Bootcamp.findById(bootcampId)
 
@@ -78,9 +78,9 @@ router.post(('/'),  async (req,res)=>{
 //4. actulizar  bootcamp por id
 router.put('/:id',  async(req,res)=>{
 
-    bootcampId=req.params.id
+   const bootcampId=req.params.id
     
-    updBootcamp=await Bootcamp.findByIdAndUpdate(
+  const  updBootcamp=await Bootcamp.findByIdAndUpdate(
     bootcampId,
     req.body,
 
@@ -107,7 +107,7 @@ return res.json(
 //4. eliminar   bootcamp por id
 router.delete('/:id',async (req,res)=>{
 
-    bootcampId=req.params.id
+  const  bootcampId=req.params.id
     
    await Bootcamp.findByIdAndDelete(bootcampId)
 

@@ -78,7 +78,7 @@ router.put('/:id', async(req,res)=>{
 
 
 
-    updCourses=await Courses.findByIdAndUpdate(
+   const updCourses=await Courses.findByIdAndUpdate(
         coursesId,
         req.body,
     
