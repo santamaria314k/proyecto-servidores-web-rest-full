@@ -18,13 +18,26 @@ const router = express.Router()
 
 router.get(('/'), async (req,res)=>{
     //traer  los users en base de datos
+   
+
+   
     const users= await User.find()
-    return res.json(
+ if (users.length > 0) {
+
+    return res.status(200).json(
         {
             success:true,
              data:users
         }
     )
+}else{
+    res.status(404).json({
+            
+        success:false,
+        msg:"no hay users"
+    })
+}
+
 
 })
 
@@ -36,17 +49,46 @@ router.get(('/'), async (req,res)=>{
 router.get('/:id',async (req,res)=>{
 
    const userId=req.params.id
-    //consultar user po id
-  const  user= await User.findById(userId)
 
 
-return res.json(
-    {
-    success:true,
-     data:user
+try {
+    
+  //scenario de que el bootcamp sea inbalido(1,a)
+  if(!mongoose.Types.ObjectId.isValid(userId)){
+    return res.status(500).json({
+        success:false,
+        msg:"id invalido"
+    })
+    
+        }else{
+            const  user= await User.findById(userId)
+    
+            if (!user) {
+                res.status(404).json({
+                    success:false,
+                    msg:"user no encontrado"
+                })
+            } else {
+                  return res.status(200).json(
+                {
+                success:true,
+                 data:user
+            
+                }
+            )
+    
+            }
+          
+        }
+    
 
-    }
-)
+
+} catch (error) {
+    res.status(500).json({
+        success:false,
+        msg:`Error encontrado: ${error.message}`
+     }) 
+}
 
 
 })
@@ -63,14 +105,28 @@ return res.json(
 
 router.post(('/'),  async (req,res)=>{
 
-    //guardar el user  del body
-   const newUser= await User.create(req.body)
-    return res.json(
+
+
+try {
+
+
+    const newUser= await User.create(req.body)
+    return res.status(201).json(
         {
             success:true,
              data:newUser
         }
     )
+
+    
+} catch (error) {
+    res.status(500).json({
+        success:false,
+        msg:`Èrror encontrado: ${error.message}`
+        
+        })
+}
+
 
 })
 
@@ -86,22 +142,44 @@ router.put('/:id',  async(req,res)=>{
 
    const userId=req.params.id
     
-   const updUser=await User.findByIdAndUpdate(
-    userId,
-    req.body,
 
-    {
-        new:true,
+
+   try {
+    
+
+    if(!mongoose.Types.ObjectId.isValid(userId)){
+        return res.status(500).json({
+            success: false,
+            msg: "Id del user invalido"
+        })
+    } else{
+        //Traerlo por id
+        const user = await User.findByIdAndUpdate(userId , 
+                                                         req.body,{
+                                                             new: true,
+                                                             runValidators: true
+                                                         })
+        if (!user){
+            res.status(404).json({
+                success: false,
+                msg: "user no encotrado"
+            })
+        } else {
+            return res.status(200).json({
+                success: true,
+                data: user
+            })
+        }
     }
 
-   )
 
-return res.json(
-    {
-    success:true,
-    data :updUser
-    }
-)
+
+   } catch (error) {
+    res.status(500).json({
+        success: false,
+        msg: `Error encontrado ${error.message}`
+    })
+   }
 
 
 })

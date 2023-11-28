@@ -42,8 +42,6 @@ router.get(('/'), async (req,res)=>{
 
 
 
-
-
 //2.seleccionar el bootcamp cuyo id se pase por parametro 
 
 
@@ -81,10 +79,10 @@ return res.status(500).json({
 
 
 } catch (error) {
-     res.status(500).json({
+    res.status(500).json({
         success:false,
         msg:`Error encontrado: ${error.message}`
-     })
+     }) 
 }
 
     //consultar bootcamp po id
@@ -97,7 +95,7 @@ return res.status(500).json({
 
 
 
-//3.crear  los bootcamps
+//3.crear  los bootcamps  
 router.post(('/'),  async (req,res)=>{
 
     try {
@@ -129,64 +127,46 @@ msg:`Èrror encontrado: ${error.message}`
 
 
 // //4. actulizar  bootcamp por id
-// router.put('/:id',  async(req,res)=>{
 
-//    const bootcampId=req.params.id
-
-// try {
-
-
-//     if (!mongoose.Types.ObjectId.isValid(bootcampId)) {
-//         res.status(500).json({
-//             success:false,
-//             msg:"id del bootcamp no valido no encontrado"
-//         })  
-    
-//     } else {
-        
-// const  bootcamp=await Bootcamp.findByIdAndUpdate(
-//     bootcampId,
-//     req.body,
-
-//     {
-//         new:true,
-//         runValidators:true
-//     }
-// if (|bootcamp) {
-//     res.status(404).json({
-//         success:false,
-//         msg:"id del bootcamp no valido no encontrado"
-// } else {
-    
-
-
-
-
-// }
-
-    
-
-
-
-
-// } catch (error) {
-    
-// }
-
-    
-  
-
-//    )
-
-// return res.json(
-//     {
-//     success:true,
-//     data :updBootcamp
-//     }
-// )
+router.put(('/:id'),
+        async (req, res) => {
+            const bootcapmId =  req.params.id   
+            try {
+               // bootcapm id sea invalido
+               if(!mongoose.Types.ObjectId.isValid(bootcapmId)){
+                   return res.status(500).json({
+                       success: false,
+                       msg: "Id del bootcapm invalido"
+                   })
+               } else{
+                   //Traerlo por id
+                   const bootcamp = await Bootcamp.findByIdAndUpdate(bootcapmId , 
+                                                                    req.body,{
+                                                                        new: true,
+                                                                        runValidators: true
+                                                                    })
+                   if (!bootcamp){
+                       res.status(404).json({
+                           success: false,
+                           msg: "bootcapm no encotrado"
+                       })
+                   } else {
+                       return res.status(200).json({
+                           success: true,
+                           data: bootcamp
+                       })
+                   }
+               }
+   
+            } catch (error) {
+               res.status(500).json({
+                   success: false,
+                   msg: `Error encontrado ${error.message}`
+               })
+            } 
+})
 
 
-// })
 
 
 

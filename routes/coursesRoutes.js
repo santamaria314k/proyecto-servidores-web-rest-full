@@ -133,28 +133,41 @@ router.put('/:id', async(req,res)=>{
 
     const coursesId=req.params.id
 
-
-
-   const updCourses=await Courses.findByIdAndUpdate(
-        coursesId,
-        req.body,
-    
-        {
-            new:true,
+    try {
+        // courses id sea invalido
+        if(!mongoose.Types.ObjectId.isValid(coursesId)){
+            return res.status(500).json({
+                success: false,
+                msg: "Id del bootcapm invalido"
+            })
+        } else{
+            //Traerlo por id
+            const courses = await Courses.findByIdAndUpdate(coursesId , 
+                                                             req.body,{
+                                                                 new: true,
+                                                                 runValidators: true
+                                                             })
+            if (!courses){
+                res.status(404).json({
+                    success: false,
+                    msg: "course no encotrado"
+                })
+            } else {
+                return res.status(200).json({
+                    success: true,
+                    data: courses
+                })
+            }
         }
-    
-       )
 
-
-return res.json(
-    {
-    success:true,
-    data:updCourses
-    }
-)
-
-
+     } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: `Error encontrado ${error.message}`
+        })
+     } 
 })
+
 
 
 
