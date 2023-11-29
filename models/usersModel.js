@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const bcryptjs=require('bcryptjs')
+
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -12,8 +14,8 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        required: [true, "El rol es requerido"],
-        maxlength: [50, "El rol  no debe ser mayor de 50 caracteres"]
+        enum:['user','admin','publisher']
+       
     },
     password: {
         type: String,
@@ -21,5 +23,23 @@ const UserSchema = new mongoose.Schema({
         maxlength: [20, "Contraseña  no debe ser mayor de 20 caracteres"]
     }
 });
+
+
+
+UserSchema.pre('save', async function(){
+
+//generar una sal 
+const sal = await bcryptjs.genSalt(10);
+
+//encriptar la contraseña usando la sal 
+
+//utilizar  la sal 
+   this.password= await bcryptjs.hash(this.password,sal);
+})
+
+
+UserSchema.methods.compararPassword= async function(password){
+    return await bcryptjs.compare(password,this.password)
+}
 
 module.exports = mongoose.model('User', UserSchema);

@@ -7,7 +7,7 @@ const colors=require('colors')
 const connectDB =require('./config/db.js')
 
 // crear el objetro de la aplicasion 
-
+   
 
 const app=express()
 
@@ -95,7 +95,7 @@ app.use('/courses',coursesRoutes)
 //------------------------------------------------==================
 //------------------------------------------------==================
 
-app.use('/users',usersRoutes)
+app.use('/auth',usersRoutes)
 
 
 

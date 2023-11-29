@@ -3,11 +3,16 @@ const express = require('express');
 const User= require("../models/usersModel.js")
 
 
+const { default: mongoose } = require('mongoose');
+
+
 //definir rutas con la aplicasion principal
 const router = express.Router()
 
 
 //utilizar el ruteador para crear las rutas 
+
+
 
 
 
@@ -103,7 +108,7 @@ try {
 
 //3.crear  los users
 
-router.post(('/'),  async (req,res)=>{
+router.post(('/register'),  async (req,res)=>{
 
 
 
@@ -129,6 +134,23 @@ try {
 
 
 })
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
 
 
 
@@ -205,6 +227,76 @@ data:[]
 
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//ruta para el login
+router.post('/login', async (req,res)=>{
+
+    // const email= req.body.email
+    //     const password= req.body.password
+    
+    try {
+    
+        const{email,password}=req.body
+    
+        //buscar el usario al que corersponda el email
+    const user= await User.findOne({email})
+    
+    if (!user) {
+        res.status(401).json({
+            success:false,
+            msg:"no existe el e usario"
+        })
+    
+    
+    } else {
+        
+
+        const isMatch= await user.compararPassword(password)
+        if (!isMatch) {
+            res.status(401).json({
+                success:false,
+                msg:"credenciales invalidas"
+            })
+        }else{
+            res.status(200).json({
+                success:true,
+                msg:"usariuo logueado correctamente"
+            })
+        }
+    }
+    
+    
+    } catch (error) {
+        
+
+
+        res.status(500).json({
+            success: false,
+            msg: `Error encontrado ${error.message}`
+        })
+
+
+
+
+    }
+    
+        })
+    
 
 
 
