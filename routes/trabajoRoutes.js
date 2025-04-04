@@ -1,6 +1,6 @@
 const express = require('express');
 
-const Bootcamp= require("../models/bootcampsModel.js");
+const Trabajo= require("../models/trabajoModel.js");
 const { default: mongoose } = require('mongoose');
 
 //definir rutas con la aplicasion principal
@@ -12,24 +12,24 @@ const router =express.Router()
 
 
 
-//1.seleccionar todos los bootcamps
+//1.seleccionar todos los registros
 router.get(('/'), async (req,res)=>{
-    //traer  los bootcamps en base de datos
-    const bootcamps=   await Bootcamp.find()
-    //--------scenario _: no hay bootcamps en mongo
-    if (bootcamps.length > 0) {
-        //si hay bbotcamps
+    //traer  los registros en base de datos
+    const trabajo=   await Trabajo.find()
+    //--------scenario _: no hay registros en mongo
+    if (trabajo.length > 0) {
+        //si hay registros
         res.status(200).json({
             
             success:true,
-            data:bootcamps
+            data:trabajo
         })
     }else{
-  // no hay bootcamps
+  // no hay registros
   res.status(404).json({
             
     success:false,
-    msg:"no hay bootcamps"
+    msg:"no hay registros"
 })
     
     
@@ -42,33 +42,33 @@ router.get(('/'), async (req,res)=>{
 
 
 
-//2.seleccionar el bootcamp cuyo id se pase por parametro 
+//2.seleccionar el registro cuyo id se pase por parametro 
 
 
 router.get('/:id',async (req,res)=>{
 
-   const bootcampId=req.params.id
+   const trabajoId=req.params.id
 try {
-    //scenario de que el bootcamp sea inbalido(1,a)
-    if(!mongoose.Types.ObjectId.isValid(bootcampId)){
+    //scenario de que el registro sea inbalido(1,a)
+    if(!mongoose.Types.ObjectId.isValid(trabajoId)){
 return res.status(500).json({
     success:false,
     msg:"id invalido"
 })
 
     }else{
-        const  bootcamp= await Bootcamp.findById(bootcampId)
+        const  trabajo = await Trabajo.findById(trabajoId)
 
-        if (!bootcamp) {
+        if (!trabajo) {
             res.status(404).json({
                 success:false,
-                msg:"bootcamp no encontrado"
+                msg:"registro  no encontrado"
             })
         } else {
               return res.status(200).json(
             {
             success:true,
-             data:bootcamp
+             data:trabajo
         
             }
         )
@@ -85,7 +85,7 @@ return res.status(500).json({
      }) 
 }
 
-    //consultar bootcamp po id
+    //consultar registro por id
  
 })
 
@@ -95,17 +95,17 @@ return res.status(500).json({
 
 
 
-//3.crear  los bootcamps  
+//3.crear  los re  
 router.post(('/'),  async (req,res)=>{
 
     try {
 
-         //guardar el bootcamp que viene del body
-   const newBootcamp= await Bootcamp.create(req.body)
+         //guardar el REGISTRO que viene del body
+   const newTrabajo= await Trabajo.create(req.body)
    return res.status(201).json(
        {
            success:true,
-            data:newBootcamp
+            data:newTrabajo
        }
    )
         
@@ -126,34 +126,34 @@ msg:`Èrror encontrado: ${error.message}`
 
 
 
-// //4. actulizar  bootcamp por id
+// //4. actulizar  registro por id
 
 router.put(('/:id'),
         async (req, res) => {
-            const bootcapmId =  req.params.id   
+            const trabajoId =  req.params.id   
             try {
-               // bootcapm id sea invalido
-               if(!mongoose.Types.ObjectId.isValid(bootcapmId)){
+               // registro id sea invalido
+               if(!mongoose.Types.ObjectId.isValid(trabajoId)){
                    return res.status(500).json({
                        success: false,
-                       msg: "Id del bootcapm invalido"
+                       msg: "Id del registro invalido"
                    })
                } else{
                    //Traerlo por id
-                   const bootcamp = await Bootcamp.findByIdAndUpdate(bootcapmId , 
+                   const trabajo = await Trabajo.findByIdAndUpdate(trabajoId , 
                                                                     req.body,{
                                                                         new: true,
                                                                         runValidators: true
                                                                     })
-                   if (!bootcamp){
+                   if (!trabajo){
                        res.status(404).json({
                            success: false,
-                           msg: "bootcapm no encotrado"
+                           msg: "regsitro no encotrado"
                        })
                    } else {
                        return res.status(200).json({
                            success: true,
-                           data: bootcamp
+                           data: trabajo
                        })
                    }
                }
@@ -172,12 +172,12 @@ router.put(('/:id'),
 
 
 
-//4. eliminar   bootcamp por id
+//4. eliminar   regsitros por id
 router.delete('/:id',async (req,res)=>{
 
-  const  bootcampId=req.params.id
+  const  trabajoId=req.params.id
     
-   await Bootcamp.findByIdAndDelete(bootcampId)
+   await Trabajo.findByIdAndDelete(trabajoId)
 
 return res.json(
     {

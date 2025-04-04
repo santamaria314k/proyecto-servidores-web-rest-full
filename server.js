@@ -44,17 +44,12 @@ app.get('/prueba',(req , res )=>{
 
 
 
-const bootcampsRoutes = require('./routes/bootcampsRoutes.js')
-
-const coursesRoutes = require('./routes/coursesRoutes.js')
-
-const usersRoutes = require('./routes/usersRoutes.js')
-
-const reviewsRoutes = require('./routes/reviewsRoutes.js')
+const trabajoRoutes = require('./routes/trabajoRoutes.js')
 
 
 
-//crear las uris de los bootcamps
+
+//crear las uris del trabajo
 //------------------------------------------------==================
 //------------------------------------------------==================
 //------------------------------------------------==================
@@ -62,24 +57,10 @@ const reviewsRoutes = require('./routes/reviewsRoutes.js')
 
 
 
-//uri de bootcamps
+//uri de trabajo
   
 
-app.use('/bootcamps',bootcampsRoutes)
-
-
-//crear las uris de los courses
-//------------------------------------------------==================
-//------------------------------------------------==================
-//------------------------------------------------==================
-//------------------------------------------------==================
-
-
-
-//uri de bootcamps
-  
-
-app.use('/courses',coursesRoutes)
+app.use('/trabajo',trabajoRoutes)
 
 
 

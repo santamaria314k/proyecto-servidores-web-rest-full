@@ -8,7 +8,7 @@ const mongoose=require('mongoose')
 async function connectDB(){
 
 
- const conn = await mongoose.connect(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/devcamp-2687350')
+ const conn = await mongoose.connect(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/trabajo')
 
 console.log(`conexion exitosa a mongo :   ${conn.connection.host}`)
 
